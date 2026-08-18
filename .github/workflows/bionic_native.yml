@@ -85,8 +85,8 @@ jobs:
           # Clean up downloaded deb
           rm bionic_native.deb
           
-        - name: Download and extract termuxfs for aarch64
-        run: |
+          - name: Download and extract termuxfs for aarch64
+            run: |
           mkdir -p $HOME/termuxfs/aarch64
           cd $HOME/termuxfs/aarch64
           wget -q https://github.com/ziad9267/termux-on-gha/releases/download/test/termuxfs.tar
