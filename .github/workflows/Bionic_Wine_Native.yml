@@ -143,12 +143,36 @@ jobs:
           echo "LANG=ko_KR.UTF-8" >> $GITHUB_ENV
           echo "LC_ALL=ko_KR.UTF-8" >> $GITHUB_ENV
           echo "LANGUAGE=ko_KR:ko" >> $GITHUB_ENV
- 
-      - name: Wine
+          
+        - name: Wine
         run: |
           set -e
           WINE_BRANCH="${{ github.event.inputs.wine_branch || 'staging' }}"
           WINE_VERSION="${{ github.event.inputs.wine_version || 'latest' }}"
+
+          mkdir -p ${{ env.WINE_SOURCE_DIR }}
+          cd ${{ env.WINE_SOURCE_DIR }}
+
+          # 1. Download the .deb file from your GitHub Release
+          RELEASE_TAG="wine-${WINE_BRANCH}-${WINE_VERSION}-arm64"
+          DEB_FILE="wine-${WINE_BRANCH}-${WINE_VERSION}-arm64.deb"
+
+          echo "Downloading $DEB_FILE..."
+          wget -q "https://github.com/${{ Xdroid656/Wine-Bionic-Native }}/releases/${bionic_native.11.15.deb
+          }" -O package.deb
+
+          # 2. Extract the .deb file contents directly into WINE_SOURCE_DIR
+          echo "Extracting .deb contents..."
+          dpkg-deb -x package.deb ${{ env.WINE_SOURCE_DIR }}
+          rm package.deb
+
+          # 3. Export required metadata variables for subsequent steps
+          WINE_VERSION_ACTUAL="$WINE_VERSION"
+          COMMIT_HASH="release"
+          BUILD_NAME="wine-${WINE_VERSION_ACTUAL}-${COMMIT_HASH}-${WINE_BRANCH}-arm64-wow64"
+          echo "BUILD_NAME=$BUILD_NAME" >> $GITHUB_ENV
+          echo "WINE_VERSION_ACTUAL=$WINE_VERSION_ACTUAL" >> $GITHUB_ENV
+          echo "Release source extracted to ${{ env.WINE_SOURCE_DIR }}"
 
           mkdir -p ${{ env.WINE_SOURCE_DIR }}
           cd ${{ env.WINE_SOURCE_DIR }}
