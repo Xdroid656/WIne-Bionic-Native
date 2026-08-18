@@ -637,6 +637,18 @@ jobs:
           echo "TERMUX_PREFIX=$HOME/termuxfs/aarch64/data/data/com.termux/files/usr" >> $GITHUB_ENV
           echo "TERMUX_SYSROOT=$HOME/termuxfs/aarch64" >> $GITHUB_ENV
           echo "RUNTIME_PATH=/data/data/com.termux/files/usr" >> $GITHUB_ENV
+ 
+      - name: Tar and Compress Compiled Wine
+        run: |
+          cd /opt
+          # Package up the compiled Wine output directory
+          tar -czvf $HOME/$BUILD_NAME.tar.gz wine64-native
+
+      - name: Upload Wine Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BUILD_NAME }}
+          path: ~/wine-*.tar.gz
 
       - name: Publish Wine to GitHub Release
         uses: softprops/action-gh-release@v1
