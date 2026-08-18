@@ -134,6 +134,7 @@ jobs:
           tar -xJf ${{ env.LLVMMINGW_NAME }}.tar.xz
           rm ${{ env.LLVMMINGW_NAME }}.tar.xz
           echo "/opt/${{ env.LLVMMINGW_NAME }}/bin" >> $GITHUB_PATH
+
       - name: locales
         run: |
           apt-get install -y locales
@@ -143,7 +144,7 @@ jobs:
           echo "LC_ALL=ko_KR.UTF-8" >> $GITHUB_ENV
           echo "LANGUAGE=ko_KR:ko" >> $GITHUB_ENV
           
-        - name: Wine
+      - name: Wine
         run: |
           set -e
           WINE_BRANCH="${{ github.event.inputs.wine_branch || 'staging' }}"
