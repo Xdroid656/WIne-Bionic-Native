@@ -1,4 +1,4 @@
-name: Native BIonic Wine 
+name: Build Wine ARM64 termux
 
 on:
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/share/boost
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          
+
       - name: Dockerfile (Optimized for Sysroot)
         run: |
           apt-get update && apt-get install -y --no-install-recommends \
@@ -70,9 +70,9 @@ jobs:
             dpkg-dev libwayland-dev \
             fakeroot \
             less
-            
-          - name: Download and extract termuxfs for aarch64
-            run: |
+
+      - name: Download and extract termuxfs for aarch64
+        run: |
           mkdir -p $HOME/termuxfs/aarch64
           cd $HOME/termuxfs/aarch64
           wget -q https://github.com/ziad9267/termux-on-gha/releases/download/test/termuxfs.tar
@@ -484,6 +484,7 @@ jobs:
             --with-gstreamer \
             --with-ffmpeg \
             --with-pthread \
+            --without-ffmpeg \
             --without-coreaudio \
             --with-gettextpo=no \
             --disable-opencl \
@@ -594,22 +595,24 @@ jobs:
           mkdir -p wine-package/wine 
           cp -r /tmp/wine-install-wow64/* wine-package/wine/
 
+      - name: 创建打包文件
+        run: |
+          tar -cJf ${{ env.BUILD_NAME }}.tar.xz -C wine-package wine
+          ls -lh *.tar.xz
+
       - name: Generate checksums
         run: |
           sha256sum *.tar.xz > checksums.txt
           cat checksums.txt
- 
-      - name: Tar and Compress Compiled Wine
-        run: |
-          cd /opt
-          # Package up the compiled Wine output directory
-          tar -czvf $HOME/$BUILD_NAME.tar.gz wine64-native
 
-      - name: Upload Wine Artifact
+      - name: Upload Wine WoW64 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.BUILD_NAME }}
-          path: ~/wine-*.tar.gz
+          name: Wine-${{ github.event.inputs.wine_branch || 'staging' }}-${{ github.event.inputs.wine_version || 'latest' }}-ARM64
+          path: |
+            *.tar.xz
+            checksums.txt
+          retention-days: 30
 
       - name: Publish Wine to GitHub Release
         uses: softprops/action-gh-release@v1
