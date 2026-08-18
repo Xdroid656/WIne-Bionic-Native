@@ -134,7 +134,7 @@ jobs:
           tar -xJf ${{ env.LLVMMINGW_NAME }}.tar.xz
           rm ${{ env.LLVMMINGW_NAME }}.tar.xz
           echo "/opt/${{ env.LLVMMINGW_NAME }}/bin" >> $GITHUB_PATH
-
+        
       - name: locales
         run: |
           apt-get install -y locales
