@@ -1,3 +1,6 @@
+ env:
+   FORCE_JAVASCRIPT_ACTIVITY_TO_NODE24: true
+
 name: Native BIonic Wine 
 
 on:
