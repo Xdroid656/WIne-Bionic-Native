@@ -55,21 +55,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/share/boost
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-
-          - name: Extract Bionic Native.deb
           
-          mkdir -p $HOME/termuxfs/aarch64
-          cd $HOME/termuxfs/aarch64
-          
-          # Download using your direct GitHub Release link
-          wget -q https://github.com/Xdroid656/Wine-Bionic-Native/releases/bionic_native.11.15.deb -O bionic_native.deb
-
-          # Extract into the termuxfs sysroot
-          dpkg-deb -x bionic_native.deb .
-
-          # Clean up downloaded deb
-          rm bionic_native.deb
-
       - name: Dockerfile (Optimized for Sysroot)
         run: |
           apt-get update && apt-get install -y --no-install-recommends \
