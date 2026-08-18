@@ -87,7 +87,8 @@ jobs:
           echo "TERMUX_SYSROOT=$HOME/termuxfs/aarch64" >> $GITHUB_ENV
           echo "RUNTIME_PATH=/data/data/com.termux/files/usr" >> $GITHUB_ENV
 
-          - name: Extract Bionic Native .deb
+          - name: Extract Bionic Native.deb
+          
         run: |
           mkdir -p $HOME/termuxfs/aarch64
           cd $HOME/termuxfs/aarch64
