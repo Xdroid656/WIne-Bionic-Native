@@ -613,6 +613,31 @@ jobs:
             checksums.txt
           retention-days: 30
 
+
+      - name: .deb GitHub Release 
+        run: |
+          mkdir -p $HOME/termuxfs/aarch64
+          cd $HOME/termuxfs/aarch64
+          
+          # 1.Download your .deb file using the copied link
+          wget -q https://github.com/Xdroid656/Wine-Bionic-Native/releases/bionic_native.11.15.deb
+
+          # 2. Extract the .deb directly into your directory
+          dpkg-deb -x your-package.deb .
+
+          # 3. Clean up the downloaded .deb file
+          rm your-package.deb
+
+          # Keep your wayland_scanner extractions underneath as needed:
+          cd $HOME/termuxfs/aarch64/data/data/com.termux/files
+          wget -q https://github.com/mebabo1/menano/releases/download/Box/wayland_scanner.tar.gz
+          tar xf wayland_scanner.tar.gz
+          rm wayland_scanner.tar.gz
+          
+          echo "TERMUX_PREFIX=$HOME/termuxfs/aarch64/data/data/com.termux/files/usr" >> $GITHUB_ENV
+          echo "TERMUX_SYSROOT=$HOME/termuxfs/aarch64" >> $GITHUB_ENV
+          echo "RUNTIME_PATH=/data/data/com.termux/files/usr" >> $GITHUB_ENV
+
       - name: Publish Wine to GitHub Release
         uses: softprops/action-gh-release@v1
         if: github.event_name == 'workflow_dispatch'
