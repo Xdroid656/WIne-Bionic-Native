@@ -594,25 +594,10 @@ jobs:
           mkdir -p wine-package/wine 
           cp -r /tmp/wine-install-wow64/* wine-package/wine/
 
-      - name: 创建打包文件
-        run: |
-          tar -cJf ${{ env.BUILD_NAME }}.tar.xz -C wine-package wine
-          ls -lh *.tar.xz
-
       - name: Generate checksums
         run: |
           sha256sum *.tar.xz > checksums.txt
           cat checksums.txt
-
-      - name: Upload Wine WoW64 artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Wine-${{ github.event.inputs.wine_branch || 'staging' }}-${{ github.event.inputs.wine_version || 'latest' }}-ARM64
-          path: |
-            *.tar.xz
-            checksums.txt
-          retention-days: 30
-
 
       - name: .deb GitHub Release 
         run: |
