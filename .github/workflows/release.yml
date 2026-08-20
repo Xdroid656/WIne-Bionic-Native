@@ -36,7 +36,7 @@ jobs:
           mkdir workspace
           
           # 3. Unpack the Debian package
-          dpkg-deb -x ./bionic_native.11.15.deb workspace/
+          dpkg-deb -x https://github.com/Xdroid656/WIne-Bionic-Native/releases/bionic_native.11.5.0.deb
           
           # 4. Compress contents into .tar.xz (including hidden files without dir changing bugs)
           tar -cJf bionic_native.11.15.tar.xz -C workspace .
