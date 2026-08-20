@@ -1,12 +1,13 @@
 name: Unpack DEB and Publish TAR.XZ
 
 on:
-  push:
-    tags:
-      - 'v*' # Triggers whenever you push a version tag like v1.0.0
+  push: origin
+    tags: v.1.15.0
+      - 'v*' # Triggers on version tags like v1.0.0
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab for testing
 
 permissions:
-  contents: write # Crucial permission required to upload files to GitHub Releases
+  contents: write # Grants permission to upload files to GitHub Releases
 
 jobs:
   build-and-release:
@@ -17,16 +18,20 @@ jobs:
 
       - name: Extract DEB and Pack TAR.XZ
         run: |
-          # 1. Create a workspace
+          # 1. Verify the .deb file exists in root before proceeding
+          if [ ! -f ./bionic_native.11.15.deb ]; then
+            echo "Error: bionic_native.11.15.deb not found in workspace!"
+            exit 1
+          fi
+
+          # 2. Create workspace directory
           mkdir workspace
           
-          # 2. Unpack the existing Debian package (Adjust path if needed)
+          # 3. Unpack the Debian package
           dpkg-deb -x ./bionic_native.11.15.deb workspace/
           
-          # 3. Compress workspace files into the .tar.xz archive
-          cd workspace
-          tar -cJf ../bionic_native.11.15.tar.xz *
-          cd ..
+          # 4. Compress contents into .tar.xz (including hidden files without dir changing bugs)
+          tar -cJf bionic_native.11.15.tar.xz -C workspace .
 
       - name: Post to GitHub Releases
         uses: softprops/action-gh-release@v2
