@@ -1,15 +1,22 @@
 name: Unpack DEB and Publish TAR.XZ
 
-on:
-  push: 
-   branch: original 
-    tags: v1.15.0
-    - 'v*' # Triggers on version tags like v1.0.0
-  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab for testing
-
-permissions:
-  contents: write # Grants permission to upload files to GitHub Releases
-
+ on:
+  workflow_dispatch:
+    inputs:
+      wine_branch:
+        description: 'Wine 分支'
+        required: false
+        default: 'proton'
+        type: choice
+        options:
+        - proton
+        - staging
+        
+      wine_version:
+        description: 'Wine 版本 (例如 9.22，或 latest)'
+        required: false
+        default: 'latest'
+        type: string
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
