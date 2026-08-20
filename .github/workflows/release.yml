@@ -1,6 +1,6 @@
 name: Unpack DEB and Publish TAR.XZ
 
- on:
+on:
   workflow_dispatch:
     inputs:
       wine_branch:
