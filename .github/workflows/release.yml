@@ -1,0 +1,37 @@
+name: Unpack DEB and Publish TAR.XZ
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers whenever you push a version tag like v1.0.0
+
+permissions:
+  contents: write # Crucial permission required to upload files to GitHub Releases
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract DEB and Pack TAR.XZ
+        run: |
+          # 1. Create a workspace
+          mkdir workspace
+          
+          # 2. Unpack the existing Debian package (Adjust path if needed)
+          dpkg-deb -x ./bionic_native.11.15.deb workspace/
+          
+          # 3. Compress workspace files into the .tar.xz archive
+          cd workspace
+          tar -cJf ../bionic_native.11.15.tar.xz *
+          cd ..
+
+      - name: Post to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bionic_native.11.15.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
