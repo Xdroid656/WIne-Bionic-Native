@@ -11,7 +11,7 @@ on:
         options:
         - proton
         - staging
-        
+        - winearm64ec
       wine_version:
         description: 'Wine 版本 (例如 9.22，或 latest)'
         required: false
@@ -27,7 +27,7 @@ jobs:
        - name: Download release asset
        
   run: |
-    wget https://github.com/Xdroid656/WIne-Bionic-Native/releases/bionic_native.11.5.0.deb
+    wget https://github.com/Xdroid656/WIne-Bionic-Native/releases/Releases/bionic_native.11.5.0.deb
 
       - name: Extract DEB and Pack TAR.XZ
         run: |
