@@ -1,10 +1,10 @@
 name: Unpack DEB and Publish TAR.XZ
 
 on:
-  push: origin
-tags: v1.15.0
+  push: original
+    tags: v1.15.0
       - 'v*' # Triggers on version tags like v1.0.0
-workflow_dispatch: # Allows manual trigger from the GitHub Actions tab for testing
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab for testing
 
 permissions:
   contents: write # Grants permission to upload files to GitHub Releases
